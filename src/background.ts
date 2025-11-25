@@ -11,7 +11,7 @@ interface QuizResponse {
   error?: boolean
 }
 
-const DEFAULT_DIFFICULTY = 'easy'
+const DEFAULT_DIFFICULTY = 'medium'
 const DEFAULT_LANGUAGE = 'en'
 
 chrome.runtime.onMessage.addListener(

@@ -187,7 +187,7 @@ document.addEventListener(
 
     // load saved setting and request quiz from background
     chrome.storage.sync.get(
-      { difficulty: 'easy', language: 'en' },
+      { difficulty: 'medium', language: 'en' },
       ({ difficulty, language }) => {
         chrome.runtime.sendMessage(
           { type: 'GET_QUIZ', difficulty, language },

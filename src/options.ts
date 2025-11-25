@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // load saved setting
   chrome.storage.sync.get(['difficulty'], (data: { difficulty: string }) => {
-    const difficulty = data.difficulty ?? 'easy'
+    const difficulty = data.difficulty ?? 'medium'
     const target = document.querySelector<HTMLInputElement>(
       `input[name="difficulty"][value="${difficulty}"]`
     )
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   saveButton.addEventListener('click', () => {
-    const selected = [...radios].find((r) => r.checked)?.value ?? 'easy'
+    const selected = [...radios].find((r) => r.checked)?.value ?? 'medium'
 
     chrome.storage.sync.set({ difficulty: selected }, () => {
       alert(`Difficulty「${selected}」saved.`)

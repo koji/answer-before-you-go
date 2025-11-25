@@ -27,12 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 現在の設定を読み込み（language のデフォルトを "en" にしておく）
   chrome.storage.sync.get(
-    { difficulty: 'easy', enabled: true, language: 'en' },
+    { difficulty: 'medium', enabled: true, language: 'en' },
     (data: { difficulty: string; enabled: boolean; language: string }) => {
-      // 難易度
-      // const currentDifficulty = data.difficulty
       const target = document.querySelector<HTMLInputElement>(
         `input[name="difficulty"][value="${data.difficulty}"]`
       )
@@ -43,8 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // ON/OFF
       renderEnabled(data.enabled)
 
-      // 言語
-      // languageSelect.value = data.language || 'en'
       const languageSelect = document.getElementById(
         'languageSelect'
       ) as HTMLSelectElement | null
@@ -56,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   )
 
-  // 電源ボタン：即ON/OFF切り替え
   powerToggle?.addEventListener('click', () => {
     chrome.storage.sync.get({ enabled: true }, (data: { enabled: boolean }) => {
       const next = !data.enabled
@@ -72,10 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
-  // Saveボタン：difficulty と language を保存
+  // to save difficulty and language
   saveButton?.addEventListener('click', () => {
     const selectedDifficulty =
-      [...radios].find((r) => r.checked)?.value || 'easy'
+      [...radios].find((r) => r.checked)?.value || 'medium'
     const selectedLanguage = languageSelect?.value || 'en'
 
     chrome.storage.sync.set(

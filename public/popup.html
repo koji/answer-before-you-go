@@ -137,8 +137,9 @@
     <input type="radio" name="difficulty" value="hard" /> hard
   </label>
 
-  <h1>Language</h1>
-  <select id="languageSelect">
+  <h1 id="languageHeading">Language</h1>
+  <label class="sr-only" for="languageSelect">Language</label>
+  <select id="languageSelect" aria-labelledby="languageHeading">
     <option value="de">Deutsch</option>
     <option value="en">English</option>
     <option value="es">Español</option>

@@ -23,3 +23,8 @@ bun run build      # production bundle into dist/
 bun run build:dev  # dev build
 bun run release    # build + zip (uses bun run zip)
 ```
+
+
+
+https://github.com/user-attachments/assets/c9cc538b-17a0-46ed-8096-6b40f31d5e41
+

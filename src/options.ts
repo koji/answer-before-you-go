@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const radios: NodeListOf<HTMLInputElement> = document.querySelectorAll(
-      'input[name="difficulty"]'
-    )
+  const radios: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+    'input[name="difficulty"]'
+  )
   const saveButton = document.getElementById('save') as HTMLButtonElement | null
 
   if (!saveButton) {

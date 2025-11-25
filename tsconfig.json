@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "strict": true,
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "allowJs": false
+  },
+  "include": ["src"]
+}

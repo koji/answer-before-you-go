@@ -40,14 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // ON/OFF
       renderEnabled(data.enabled)
 
-      const languageSelect = document.getElementById(
-        'languageSelect'
-      ) as HTMLSelectElement | null
 
       if (!languageSelect) {
         console.error('popup: #languageSelect not found')
         return
       }
+      languageSelect.value = data.language
     }
   )
 

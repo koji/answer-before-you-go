@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Saveボタン：difficulty と language を保存
   saveButton?.addEventListener('click', () => {
     const selectedDifficulty =
-      [...radios].find((r) => r.checked)?.value || 'medium'
+      [...radios].find((r) => r.checked)?.value || 'easy'
     const selectedLanguage = languageSelect?.value || 'en'
 
     chrome.storage.sync.set(

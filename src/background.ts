@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(
       try {
         const difficulty = message.difficulty ?? DEFAULT_DIFFICULTY
         const language = message.language ?? DEFAULT_LANGUAGE
-        const url = `${QUIZ_API_BASE}/quiz??difficulty=${encodeURIComponent(
+        const url = `${QUIZ_API_BASE}/quiz?difficulty=${encodeURIComponent(
           difficulty
         )}&language=${encodeURIComponent(language)}`
         // console.log('Quiz API URL:', url)

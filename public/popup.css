@@ -37,7 +37,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: var(--light-gray-color);
-  transition: .4s;
+  transition: background-color 0.4s;
   border-radius: 34px;
 }
 

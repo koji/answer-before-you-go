@@ -11,8 +11,10 @@
   },
   "scripts": {
     "release": "bun run build && bun run zip",
+    "release:win": "bun run build && bun run zip:win",
     "build": "node build.mjs --prod",
     "build:dev": "node build.mjs",
-    "zip": "cd dist && zip -r ../extension.zip ."
+    "zip": "cd dist && zip -r ../extension.zip .",
+    "zip:win": "powershell -Command \"Compress-Archive -Path dist\\* -DestinationPath extension.zip -Force\""
   }
 }

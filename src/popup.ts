@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, duration);
   }
 
-  function saveOption(key: string, value: string | boolean, message: string) {
+  function saveOption(key: string, value: any, message: string) {
     chrome.storage.sync.set({ [key]: value }, () => {
       showStatus(message);
     });

@@ -200,7 +200,12 @@ const createQuizModal = (
   document.head.appendChild(style);
   document.body.appendChild(overlay);
 
+  let errorTimeoutId: number | undefined;
+
   closeBtn.onclick = () => {
+    if (errorTimeoutId) {
+      clearTimeout(errorTimeoutId);
+    }
     document.head.removeChild(style);
     document.body.removeChild(overlay);
     onResult(false);
@@ -222,7 +227,12 @@ const createQuizModal = (
       onResult(true);
     } else {
       errorStatus.textContent = "Oops, try again! Some answers are incorrect.";
-      setTimeout(() => { errorStatus.textContent = "" }, 2000);
+      if (errorTimeoutId) {
+        clearTimeout(errorTimeoutId);
+      }
+      errorTimeoutId = setTimeout(() => {
+        errorStatus.textContent = ""
+      }, 2000);
     }
   }
 }

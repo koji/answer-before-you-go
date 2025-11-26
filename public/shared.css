@@ -16,7 +16,7 @@ body {
 }
 
 .button {
-  padding: 10px 15px;
+  padding: 0.625rem 1rem;
   border: 1px solid var(--primary-color);
   border-radius: 5px;
   background-color: transparent;

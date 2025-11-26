@@ -1,6 +1,6 @@
 body {
-  width: 250px;
-  padding: 15px;
+  width: 15.625rem;
+  padding: 1rem;
   background-color: var(--background-color);
 }
 
@@ -8,19 +8,19 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .title {
-  font-size: 16px;
+  font-size: 1px;
   font-weight: bold;
 }
 
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 24px;
+  width: 2.5rem;
+  height: 1.5rem;
 }
 
 .toggle-switch input {
@@ -44,10 +44,10 @@ body {
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
+  height: 1rem;
+  width: 1rem;
+  left: 0.25rem;
+  bottom: 0.25rem;
   background-color: white;
   transition: 0.4s;
   border-radius: 50%;
@@ -64,8 +64,8 @@ input:checked + .slider:before {
 .section-title {
   font-size: 14px;
   font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
 }
 
 .difficulty-options {
@@ -76,7 +76,7 @@ input:checked + .slider:before {
 .difficulty-options .button {
   flex-grow: 1;
   margin: 0 2px;
-  padding: 8px 0;
+  padding: 0.5rem 0;
   text-align: center;
   border-color: var(--light-gray-color);
   color: var(--text-color);
@@ -91,15 +91,15 @@ input:checked + .slider:before {
 
 #languageSelect {
   width: 100%;
-  padding: 8px;
+  padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid var(--light-gray-color);
 }
 
 .status {
-  margin-top: 15px;
+  margin-top: 1rem;
   font-size: 12px;
   color: var(--success-color);
   text-align: center;
-  min-height: 15px;
+  min-height: 1rem;
 }

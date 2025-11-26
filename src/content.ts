@@ -69,7 +69,7 @@ const createQuizModal = (
   modal.id = 'quiz-gate-modal';
 
   const title = document.createElement('h2');
-  title.textContent = "Hold on! Just a quick brain-teaser before you go.";
+  title.textContent = "Hold on! Just a quick brain teaser before you go.";
   modal.appendChild(title);
 
   const form = document.createElement('form');

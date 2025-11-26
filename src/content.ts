@@ -231,7 +231,7 @@ const createQuizModal = (
         clearTimeout(errorTimeoutId);
       }
       errorTimeoutId = setTimeout(() => {
-        errorStatus.textContent = ''
+        errorStatus.textContent = ""
       }, 2000);
     }
   }

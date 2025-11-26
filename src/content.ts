@@ -200,7 +200,7 @@ const createQuizModal = (
   document.head.appendChild(style);
   document.body.appendChild(overlay);
 
-  let errorTimeoutId: number | undefined;
+  let errorTimeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
 
   closeBtn.onclick = () => {
     if (errorTimeoutId) {

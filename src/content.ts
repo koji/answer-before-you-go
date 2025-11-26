@@ -62,104 +62,167 @@ const createQuizModal = (
   quiz: QuizData,
   onResult: (passed: boolean) => void
 ) => {
-  // quiz: { questions: [ { question, choices, correctIndex } ] }
+  const overlay = document.createElement('div');
+  overlay.id = 'quiz-gate-overlay';
 
-  const overlay = document.createElement('div')
-  overlay.style.position = 'fixed'
-  overlay.style.inset = '0'
-  overlay.style.background = 'rgba(0,0,0,0.5)'
-  overlay.style.zIndex = '999999'
+  const modal = document.createElement('div');
+  modal.id = 'quiz-gate-modal';
 
-  const modal = document.createElement('div')
-  modal.style.position = 'absolute'
-  modal.style.top = '50%'
-  modal.style.left = '50%'
-  modal.style.transform = 'translate(-50%, -50%)'
-  modal.style.background = '#fff'
-  modal.style.padding = '20px'
-  modal.style.borderRadius = '8px'
-  modal.style.maxWidth = '600px'
-  modal.style.width = '90%'
-  modal.style.maxHeight = '80%'
-  modal.style.overflowY = 'auto'
-  modal.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)'
+  const title = document.createElement('h2');
+  title.textContent = "Hold on! Just a quick brain-teaser before you go.";
+  modal.appendChild(title);
 
-  const title = document.createElement('h2')
-  title.textContent = 'Quiz if you answer all correctly, you can move.'
-  modal.appendChild(title)
-
-  const form = document.createElement('form')
+  const form = document.createElement('form');
 
   quiz.questions.forEach((q, i) => {
-    const qWrapper = document.createElement('div')
-    qWrapper.style.margin = '16px 0'
+    const qWrapper = document.createElement('div');
+    qWrapper.className = 'question-wrapper';
 
-    const qTitle = document.createElement('p')
-    qTitle.textContent = `Q${i + 1}. ${q.question}`
-    qWrapper.appendChild(qTitle)
+    const qTitle = document.createElement('p');
+    qTitle.className = 'question-title';
+    qTitle.textContent = `Q${i + 1}. ${q.question}`;
+    qWrapper.appendChild(qTitle);
 
+    const choicesWrapper = document.createElement('div');
+    choicesWrapper.className = 'choices-wrapper';
     q.choices.forEach((choice, idx) => {
-      const label = document.createElement('label')
-      label.style.display = 'block'
-      const radio = document.createElement('input')
-      radio.type = 'radio'
-      radio.name = `q${i}`
-      radio.value = String(idx)
-      label.appendChild(radio)
-      label.appendChild(document.createTextNode(' ' + choice))
-      qWrapper.appendChild(label)
-    })
+      const label = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `q${i}`;
+      radio.value = String(idx);
 
-    form.appendChild(qWrapper)
-  })
+      const choiceText = document.createElement('span');
+      choiceText.textContent = choice;
 
-  const buttonWrapper = document.createElement('div')
-  buttonWrapper.style.textAlign = 'right'
-  buttonWrapper.style.marginTop = '16px'
+      label.appendChild(radio);
+      label.appendChild(choiceText);
+      choicesWrapper.appendChild(label);
+    });
+    qWrapper.appendChild(choicesWrapper);
+    form.appendChild(qWrapper);
+  });
 
-  const cancelBtn = document.createElement('button')
-  cancelBtn.type = 'button'
-  cancelBtn.textContent = 'Cancel'
+  const errorStatus = document.createElement('div');
+  errorStatus.className = 'error-status';
 
-  const submitBtn = document.createElement('button')
-  submitBtn.type = 'submit'
-  submitBtn.textContent = 'Submit'
-  submitBtn.style.marginLeft = '8px'
+  const buttonWrapper = document.createElement('div');
+  buttonWrapper.className = 'button-wrapper';
 
-  buttonWrapper.appendChild(cancelBtn)
-  buttonWrapper.appendChild(submitBtn)
-  form.appendChild(buttonWrapper)
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.textContent = 'Close';
+  closeBtn.className = 'button';
 
-  modal.appendChild(form)
-  overlay.appendChild(modal)
-  document.body.appendChild(overlay)
+  const submitBtn = document.createElement('button');
+  submitBtn.type = 'submit';
+  submitBtn.textContent = 'Submit';
+  submitBtn.className = 'button button-primary';
 
-  cancelBtn.onclick = () => {
-    document.body.removeChild(overlay)
-    onResult(false)
+  buttonWrapper.appendChild(closeBtn);
+  buttonWrapper.appendChild(submitBtn);
+  form.appendChild(errorStatus);
+  form.appendChild(buttonWrapper);
+
+  modal.appendChild(form);
+  overlay.appendChild(modal);
+
+  const style = document.createElement('style');
+  style.textContent = `
+    #quiz-gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #quiz-gate-modal {
+      background: #f8f9fa;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #343a40;
+    }
+    #quiz-gate-modal h2 {
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #7c5cbf;
+    }
+    .question-wrapper { margin-bottom: 20px; }
+    .question-title { font-weight: bold; margin-bottom: 12px; }
+    .choices-wrapper label {
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .choices-wrapper label:hover { background-color: #e9ecef; }
+    .choices-wrapper input[type="radio"] { margin-right: 10px; }
+    .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .button {
+      padding: 10px 20px;
+      border: 1px solid #7c5cbf;
+      border-radius: 5px;
+      background-color: transparent;
+      color: #7c5cbf;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover { background-color: #e3d7ff; }
+    .button-primary {
+      background-color: #7c5cbf;
+      color: white;
+    }
+    .button-primary:hover { background-color: #6a4fa8; }
+    .error-status {
+      margin-top: 15px;
+      color: #dc3545;
+      text-align: center;
+      min-height: 18px;
+    }
+  `;
+
+  document.head.appendChild(style);
+  document.body.appendChild(overlay);
+
+  closeBtn.onclick = () => {
+    document.head.removeChild(style);
+    document.body.removeChild(overlay);
+    onResult(false);
   }
 
   form.onsubmit = (e) => {
-    e.preventDefault()
-    // check answer
-    let allCorrect = true
+    e.preventDefault();
+    let allCorrect = true;
     quiz.questions.forEach((q, i) => {
-      const selected = form.querySelector<HTMLInputElement>(
-        `input[name="q${i}"]:checked`
-      )
+      const selected = form.querySelector<HTMLInputElement>(`input[name="q${i}"]:checked`);
       if (!selected || Number(selected.value) !== q.correctIndex) {
-        allCorrect = false
+        allCorrect = false;
       }
-    })
+    });
 
     if (allCorrect) {
-      alert('All correct! You can move.')
-      document.body.removeChild(overlay)
-      onResult(true)
+      document.head.removeChild(style);
+      document.body.removeChild(overlay);
+      onResult(true);
     } else {
-      alert("You have incorrect answers…. You can't move.")
-      document.body.removeChild(overlay)
-      onResult(false)
+      errorStatus.textContent = "Oops, try again! Some answers are incorrect.";
+      setTimeout(() => { errorStatus.textContent = "" }, 2000);
     }
   }
 }

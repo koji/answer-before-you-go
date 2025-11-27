@@ -1,5 +1,6 @@
-# Answer Before You Go
+![logo](https://github.com/koji/answer-before-you-go/blob/edge/public/icon-128.png)
 
+# Answer Before You Go 
 ## Overview
 
 A Chrome extension that blocks navigation to “guarded” sites (YouTube, TikTok, Netflix, X, etc.) until the user passes a short quiz. A content script intercepts left-clicks on those domains, requests quiz data from the background service worker, shows the quiz modal, and only releases the navigation when all answers are correct.

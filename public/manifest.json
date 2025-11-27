@@ -3,6 +3,11 @@
   "name": "Quiz Gate Navigation",
   "version": "1.0",
   "description": "answer quiz before you move",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
   "permissions": [
     "storage",
     "scripting",
@@ -18,7 +23,12 @@
   "options_page": "options.html",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Quiz Gate Settings"
+    "default_title": "Quiz Gate Settings",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
   },
   "content_scripts": [
     {

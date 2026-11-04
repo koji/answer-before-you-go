@@ -1,3 +1,9 @@
+import {
+  DEFAULT_DIFFICULTY,
+  DEFAULT_ENABLED,
+  DEFAULT_LANGUAGE,
+} from './settings'
+
 let isExtensionEnabled = true // toggle by storage or something
 
 interface QuizQuestion {
@@ -29,7 +35,7 @@ const GUARDED_DOMAINS = [
 type GuardedDomain = (typeof GUARDED_DOMAINS)[number]
 
 chrome.storage.sync.get(
-  { enabled: true },
+  { enabled: DEFAULT_ENABLED },
   ({ enabled }: { enabled: boolean }) => {
     isExtensionEnabled = enabled
   }
@@ -260,7 +266,7 @@ document.addEventListener(
 
     // load saved setting and request quiz from background
     chrome.storage.sync.get(
-      { difficulty: 'medium', language: 'en' },
+      { difficulty: DEFAULT_DIFFICULTY, language: DEFAULT_LANGUAGE },
       ({ difficulty, language }) => {
         chrome.runtime.sendMessage(
           { type: 'GET_QUIZ', difficulty, language },

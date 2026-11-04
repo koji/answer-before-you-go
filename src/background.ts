@@ -1,3 +1,5 @@
+import { DEFAULT_DIFFICULTY, DEFAULT_LANGUAGE } from './settings'
+
 const QUIZ_API_BASE = 'https://baxin-quiz-api-server.hf.space' // base endpoint
 
 interface GetQuizMessage {
@@ -11,8 +13,6 @@ interface QuizResponse {
   error?: boolean
 }
 
-const DEFAULT_DIFFICULTY = 'medium'
-const DEFAULT_LANGUAGE = 'en'
 
 chrome.runtime.onMessage.addListener(
   (

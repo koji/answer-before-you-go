@@ -1,3 +1,5 @@
+import { DEFAULT_SETTINGS } from './settings'
+
 document.addEventListener('DOMContentLoaded', () => {
   const powerToggle = document.getElementById('powerToggle') as HTMLInputElement | null;
   const difficultyButtons = document.querySelectorAll<HTMLButtonElement>('.difficulty-options .button');
@@ -28,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Load initial settings from storage
-  chrome.storage.sync.get({ difficulty: 'medium', enabled: true, language: 'en' }, (data) => {
+  chrome.storage.sync.get(DEFAULT_SETTINGS, (data) => {
     if (powerToggle) {
       powerToggle.checked = data.enabled;
     }

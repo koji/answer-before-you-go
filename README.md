@@ -25,10 +25,19 @@ bun run build:dev  # dev build
 bun run release    # build + zip (uses bun run zip)
 ```
 
+## Load the extension (unpacked)
+
+After building:
+
+1. Open `chrome://extensions` in Chrome
+2. Enable **Developer mode** (top right)
+3. Click **Load unpacked** and select the `dist/` directory
+4. The "Quiz Gate Settings" action appears in the toolbar
+
 ## screenshots
-<img width="299" height="293" alt="2025-11-26 19_15_56-answer-before-you-go - Antigravity -  gitignore" src="https://github.com/user-attachments/assets/6ba12099-319e-42b4-8557-9b39fd1562c1" />
+<img width="299" height="293" alt="Quiz modal shown before navigating to a guarded site" src="https://github.com/user-attachments/assets/6ba12099-319e-42b4-8557-9b39fd1562c1" />
 <br/>
-<img width="517" height="660" alt="2025-11-26 19_17_24-answer-before-you-go - Antigravity -  gitignore" src="https://github.com/user-attachments/assets/b8689dcb-6140-47c7-8bfb-5df2ffc789de" />
+<img width="517" height="660" alt="Popup with the link blocker toggle, difficulty, and language settings" src="https://github.com/user-attachments/assets/b8689dcb-6140-47c7-8bfb-5df2ffc789de" />
 
 ## demo
 https://github.com/user-attachments/assets/c9cc538b-17a0-46ed-8096-6b40f31d5e41

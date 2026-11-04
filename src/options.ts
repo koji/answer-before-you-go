@@ -1,3 +1,5 @@
+import { DEFAULT_DIFFICULTY } from './settings'
+
 document.addEventListener('DOMContentLoaded', () => {
   const radios: NodeListOf<HTMLInputElement> = document.querySelectorAll(
     'input[name="difficulty"]'
@@ -11,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // load saved setting
   chrome.storage.sync.get(['difficulty'], (data: { difficulty: string }) => {
-    const difficulty = data.difficulty ?? 'medium'
+    const difficulty = data.difficulty ?? DEFAULT_DIFFICULTY
     const target = document.querySelector<HTMLInputElement>(
       `input[name="difficulty"][value="${difficulty}"]`
     )
@@ -19,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   saveButton.addEventListener('click', () => {
-    const selected = [...radios].find((r) => r.checked)?.value ?? 'medium'
+    const selected =
+      [...radios].find((r) => r.checked)?.value ?? DEFAULT_DIFFICULTY
 
     chrome.storage.sync.set({ difficulty: selected }, () => {
       alert(`Difficulty「${selected}」saved.`)

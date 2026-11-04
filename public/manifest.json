@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quiz Gate Navigation",
-  "version": "1.0",
+  "version": "0.1.0",
   "description": "answer quiz before you move",
   "icons": {
     "16": "icon-16.png",

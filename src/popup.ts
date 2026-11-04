@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, duration);
   }
 
-  function saveOption(key: string, value: any, message: string) {
+  function saveOption(key: string, value: string | boolean, message: string) {
     chrome.storage.sync.set({ [key]: value }, () => {
       showStatus(message);
     });
@@ -29,13 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load initial settings from storage
   chrome.storage.sync.get({ difficulty: 'medium', enabled: true, language: 'en' }, (data) => {
+    const enabled = typeof data.enabled === 'boolean' ? data.enabled : true;
+    const language = typeof data.language === 'string' ? data.language : 'en';
+    const difficulty = typeof data.difficulty === 'string' ? data.difficulty : 'medium';
     if (powerToggle) {
-      powerToggle.checked = data.enabled;
+      powerToggle.checked = enabled;
     }
     if (languageSelect) {
-      languageSelect.value = data.language;
+      languageSelect.value = language;
     }
-    updateDifficultyUI(data.difficulty);
+    updateDifficultyUI(difficulty);
   });
 
   // Event listener for the power toggle

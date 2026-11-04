@@ -9,9 +9,7 @@
     "128": "icon-128.png"
   },
   "permissions": [
-    "storage",
-    "scripting",
-    "activeTab"
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"

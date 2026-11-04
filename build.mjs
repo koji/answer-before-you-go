@@ -1,5 +1,6 @@
 import esbuild from "esbuild";
 import { cpSync, rmSync, existsSync } from "fs";
+import { basename } from "path";
 
 const isWatch = process.argv.includes("--watch");
 const isProd = process.argv.includes("--prod");
@@ -8,8 +9,14 @@ if (existsSync("dist")) {
   rmSync("dist", { recursive: true });
 }
 
-// copy public to dist (manifest and html)
-cpSync("public", "dist", { recursive: true });
+// copy public to dist (manifest and html), excluding the large logo
+// images that only document the repo (README/social) and are never
+// referenced by the manifest, HTML, CSS, or code
+const DIST_EXCLUDED_FILES = new Set(["logo.png", "logo-transparent.png"]);
+cpSync("public", "dist", {
+  recursive: true,
+  filter: (src) => !DIST_EXCLUDED_FILES.has(basename(src)),
+});
 
 const commonOptions = {
   entryPoints: {

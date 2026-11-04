@@ -10,6 +10,7 @@
     "typescript": "^5"
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "release": "bun run build && bun run zip",
     "release:win": "bun run build && bun run zip:win",
     "build": "node build.mjs --prod",

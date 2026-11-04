@@ -44,19 +44,28 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 })
 
-const isGuardedTarget = (href: string): boolean => {
+// Returns the resolved, validated URL for a guarded target, or null when
+// the href does not point at a guarded domain. Callers must navigate to
+// this URL, not to the raw href attribute, so the destination that was
+// validated is the destination that is opened.
+const resolveGuardedUrl = (href: string): URL | null => {
   try {
     const targetUrl = new URL(href, location.href)
     const host = targetUrl.hostname.toLowerCase()
 
     // including subdomain (www.youtube.com, m.youtube.com etc)
-    return GUARDED_DOMAINS.some(
+    const guarded = GUARDED_DOMAINS.some(
       (domain) => host === domain || host.endsWith('.' + domain)
     )
+    return guarded ? targetUrl : null
   } catch (e) {
-    return false
+    return null
   }
 }
+
+// True while a quiz fetch or quiz modal is open, so rapid repeated clicks
+// on guarded links cannot stack fetches and overlays.
+let quizFlowInProgress = false
 
 const createQuizModal = (
   quiz: QuizData,
@@ -206,8 +215,8 @@ const createQuizModal = (
     if (errorTimeoutId) {
       clearTimeout(errorTimeoutId);
     }
-    document.head.removeChild(style);
-    document.body.removeChild(overlay);
+    style.remove();
+    overlay.remove();
     onResult(false);
   }
 
@@ -222,8 +231,8 @@ const createQuizModal = (
     });
 
     if (allCorrect) {
-      document.head.removeChild(style);
-      document.body.removeChild(overlay);
+      style.remove();
+      overlay.remove();
       onResult(true);
     } else {
       errorStatus.textContent = "Oops, try again! Some answers are incorrect.";
@@ -253,10 +262,16 @@ document.addEventListener(
     const href = anchor.getAttribute('href')
     if (!href) return
 
-    if (!isGuardedTarget(href)) return
+    const targetUrl = resolveGuardedUrl(href)
+    if (!targetUrl) return
 
     event.preventDefault()
     event.stopPropagation()
+
+    // A quiz is already loading or on screen: swallow extra clicks on
+    // guarded links instead of stacking fetches and modals.
+    if (quizFlowInProgress) return
+    quizFlowInProgress = true
 
     // load saved setting and request quiz from background
     chrome.storage.sync.get(
@@ -266,14 +281,16 @@ document.addEventListener(
           { type: 'GET_QUIZ', difficulty, language },
           (response) => {
             if (!response || !response.quiz) {
+              quizFlowInProgress = false
               alert("Quiz not found. You can't move.")
               return
             }
 
             const quiz = response.quiz
             createQuizModal(quiz, (passed) => {
+              quizFlowInProgress = false
               if (passed) {
-                window.location.href = href
+                window.location.href = targetUrl.href
               }
             })
           }

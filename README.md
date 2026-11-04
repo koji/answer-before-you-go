@@ -25,6 +25,17 @@ bun run build:dev  # dev build
 bun run release    # build + zip (uses bun run zip)
 ```
 
+## Known limitations
+
+The guard intercepts plain left-clicks on links to guarded domains. It does
+not intercept:
+
+- Modified clicks (Cmd/Ctrl/Shift/Alt+click), middle clicks, or `target="_blank"` links opened in a new tab
+- Keyboard activation (Enter on a focused link), context-menu "Open", or drag-to-tab
+- Direct navigation: typing or pasting the URL, bookmarks, or in-page JavaScript navigation
+
+These are accepted trade-offs for a lightweight prank/focus tool, not bugs.
+
 ## screenshots
 <img width="299" height="293" alt="2025-11-26 19_15_56-answer-before-you-go - Antigravity -  gitignore" src="https://github.com/user-attachments/assets/6ba12099-319e-42b4-8557-9b39fd1562c1" />
 <br/>

@@ -10,9 +10,12 @@ interface QuizData {
   questions: QuizQuestion[]
 }
 
+type QuizError = 'http' | 'network' | 'timeout' | 'bad_shape'
+
 interface GetQuizResponse {
   quiz?: QuizData
-  error?: boolean
+  error?: QuizError
+  status?: number
 }
 
 const GUARDED_DOMAINS = [
@@ -237,6 +240,165 @@ const createQuizModal = (
   }
 }
 
+const QUIZ_ERROR_MESSAGES: Record<string, string> = {
+  http: 'The quiz server returned an error. It may be temporarily unavailable.',
+  timeout:
+    'The quiz server took too long to respond. It may be waking up, so please retry.',
+  network: 'Could not reach the quiz server. Check your connection and retry.',
+  bad_shape: 'The quiz server returned an unexpected response.',
+}
+
+const createQuizErrorModal = (
+  targetHref: string,
+  error: string,
+  status: number | undefined,
+  onRetry: () => void
+) => {
+  const overlay = document.createElement('div')
+  overlay.id = 'quiz-gate-overlay'
+
+  const modal = document.createElement('div')
+  modal.id = 'quiz-gate-modal'
+
+  const title = document.createElement('h2')
+  title.textContent = "Couldn't load the quiz"
+  modal.appendChild(title)
+
+  const message = document.createElement('p')
+  const baseMessage =
+    QUIZ_ERROR_MESSAGES[error] ?? QUIZ_ERROR_MESSAGES.network
+  message.textContent =
+    error === 'http' && status
+      ? `${baseMessage} (HTTP ${status})`
+      : baseMessage
+  modal.appendChild(message)
+
+  const buttonWrapper = document.createElement('div')
+  buttonWrapper.className = 'button-wrapper'
+
+  const closeBtn = document.createElement('button')
+  closeBtn.type = 'button'
+  closeBtn.textContent = 'Close'
+  closeBtn.className = 'button'
+
+  const proceedBtn = document.createElement('button')
+  proceedBtn.type = 'button'
+  proceedBtn.textContent = 'Proceed anyway'
+  proceedBtn.className = 'button'
+
+  const retryBtn = document.createElement('button')
+  retryBtn.type = 'button'
+  retryBtn.textContent = 'Retry'
+  retryBtn.className = 'button button-primary'
+
+  buttonWrapper.appendChild(closeBtn)
+  buttonWrapper.appendChild(proceedBtn)
+  buttonWrapper.appendChild(retryBtn)
+  modal.appendChild(buttonWrapper)
+  overlay.appendChild(modal)
+
+  const style = document.createElement('style')
+  style.textContent = `
+    #quiz-gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #quiz-gate-modal {
+      background: #f8f9fa;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #343a40;
+    }
+    #quiz-gate-modal h2 {
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #7c5cbf;
+    }
+    .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .button {
+      padding: 10px 20px;
+      border: 1px solid #7c5cbf;
+      border-radius: 5px;
+      background-color: transparent;
+      color: #7c5cbf;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover { background-color: #e3d7ff; }
+    .button-primary {
+      background-color: #7c5cbf;
+      color: white;
+    }
+    .button-primary:hover { background-color: #6a4fa8; }
+  `
+
+  document.head.appendChild(style)
+  document.body.appendChild(overlay)
+
+  const cleanup = () => {
+    style.remove()
+    overlay.remove()
+  }
+
+  closeBtn.onclick = () => {
+    cleanup()
+  }
+
+  proceedBtn.onclick = () => {
+    cleanup()
+    window.location.href = targetHref
+  }
+
+  retryBtn.onclick = () => {
+    cleanup()
+    onRetry()
+  }
+}
+
+const requestQuiz = (targetHref: string) => {
+  // load saved setting and request quiz from background
+  chrome.storage.sync.get(
+    { difficulty: 'medium', language: 'en' },
+    ({ difficulty, language }) => {
+      chrome.runtime.sendMessage(
+        { type: 'GET_QUIZ', difficulty, language },
+        (response: GetQuizResponse | undefined) => {
+          if (!response || !response.quiz) {
+            const error = response?.error ?? 'network'
+            createQuizErrorModal(targetHref, error, response?.status, () =>
+              requestQuiz(targetHref)
+            )
+            return
+          }
+
+          createQuizModal(response.quiz, (passed) => {
+            if (passed) {
+              window.location.href = targetHref
+            }
+          })
+        }
+      )
+    }
+  )
+}
+
 document.addEventListener(
   'click',
   (event) => {
@@ -258,28 +420,7 @@ document.addEventListener(
     event.preventDefault()
     event.stopPropagation()
 
-    // load saved setting and request quiz from background
-    chrome.storage.sync.get(
-      { difficulty: 'medium', language: 'en' },
-      ({ difficulty, language }) => {
-        chrome.runtime.sendMessage(
-          { type: 'GET_QUIZ', difficulty, language },
-          (response) => {
-            if (!response || !response.quiz) {
-              alert("Quiz not found. You can't move.")
-              return
-            }
-
-            const quiz = response.quiz
-            createQuizModal(quiz, (passed) => {
-              if (passed) {
-                window.location.href = href
-              }
-            })
-          }
-        )
-      }
-    )
+    requestQuiz(href)
   },
   true
 )
